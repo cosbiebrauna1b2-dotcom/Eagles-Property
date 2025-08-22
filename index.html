@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dorothy - Property Consultation</title>
+<style>
+/* Basic Styles */
+body { margin:0; font-family: Arial,sans-serif; background:#fff; color:#000; }
+header { background:black; color:gold; padding:20px; text-align:center; }
+header h1 { margin:0; font-size:2.5rem; }
+header p { margin:5px 0 0; font-size:1.2rem; }
+/* Hero */
+.hero { position:relative; text-align:center; color:white; overflow:hidden; }
+.hero img { width:100%; max-height:500px; object-fit:cover; filter:brightness(60%); transition:transform 1.5s ease; }
+.hero:hover img { transform:scale(1.05); }
+.hero-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); opacity:0; animation:slideFadeIn 1.5s forwards 0.5s; }
+.hero-text h2 { font-size:2.5rem; color:gold; margin-bottom:20px; text-shadow:1px 1px 10px rgba(0,0,0,0.6); }
+.hero-text button { padding:15px 30px; background:gold; color:black; border:none; border-radius:8px; font-size:18px; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
+.hero-text button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
+@keyframes slideFadeIn {0% {opacity:0; transform:translate(-50%,-60%);}100% {opacity:1; transform:translate(-50%,-50%);}}
+
+/* Modal */
+.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); animation:fadeIn 0.5s forwards; }
+.modal-content { background:#000; margin:5% auto; padding:30px; border-radius:12px; width:90%; max-width:500px; color:white; border:2px solid gold; transform:scale(0.8); animation:scaleUp 0.5s forwards; }
+.close { float:right; font-size:24px; cursor:pointer; color:gold; }
+input, textarea, button { width:100%; padding:12px; margin:10px 0; border-radius:5px; border:1px solid gold; background:#111; color:#fff; font-size:16px; }
+input:invalid { border-color:red; }
+textarea { resize:vertical; }
+button { background:gold; color:black; font-weight:bold; border:none; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
+button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
+.success-message { text-align:center; color:gold; display:none; margin-top:15px; opacity:0; animation:fadeInText 0.8s forwards; }
+footer { background:black; color:gold; text-align:center; padding:15px; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+@keyframes scaleUp {0%{transform:scale(0.8); opacity:0;}100%{transform:scale(1); opacity:1;} }
+@keyframes fadeInText {0%{opacity:0;}100%{opacity:1;} }
+table { width:100%; margin-top:20px; border-collapse:collapse; color:white; background:#111; }
+table, th, td { border:1px solid gold; padding:8px; text-align:center; }
+th { background:black; color:gold; }
+@media(max-width:600px){ header h1{font-size:2rem;} header p{font-size:1rem;} .hero-text h2{font-size:1.8rem;} .hero-text button{font-size:16px; padding:12px 25px;} }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Dorothy’s Property Consulting</h1>
+<p>Helping you find the best properties in the UK</p>
+</header>
+
+<div class="hero">
+<img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="UK property">
+<div class="hero-text">
+<h2>Invest in Your Dream Home Today</h2>
+<button id="openFormBtn">Book a Free Consultation</button>
+</div>
+</div>
+
+<div id="consultModal" class="modal">
+<div class="modal-content">
+<span class="close" id="closeFormBtn">&times;</span>
+<h2 style="color: gold; text-align:center;">Book Your Free Consultation</h2>
+<form id="bookingForm">
+<input type="text" name="full_name" placeholder="Full Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="tel" name="phone" placeholder="Phone Number" required>
+<textarea name="comment" placeholder="Comment (Optional)" rows="4"></textarea>
+<input type="hidden" name="timestamp" id="timestamp" required>
+<input type="hidden" name="location" id="location" required>
+<button type="submit">Submit</button>
+</form>
+<p class="success-message">Thank you! Your booking has been submitted.</p>
+</div>
+</div>
+
+<!-- Table for showing submissions -->
+<h2 style="text-align:center; color:gold; margin-top:40px;">Submitted Bookings</h2>
+<table id="submissionsTable">
+  <thead>
+    <tr>
+      <th>Full Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Comment</th>
+      <th>Timestamp</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Data will appear here -->
+  </tbody>
+</table>
+
+<footer>
+<p>© 2025 Dorothy’s Property Consulting | Designed with ♥</p>
+</footer>
+
+<script>
+// Modal logic
+const modal = document.getElementById("consultModal");
+const openBtn = document.getElementById("openFormBtn");
+const closeBtn = document.getElementById("closeFormBtn");
+openBtn.onclick = () => modal.style.display="block";
+closeBtn.onclick = () => modal.style.display="none";
+window.onclick = (e) => { if(e.target==modal) modal.style.display="none"; }
+
+// Hidden fields
+function setHiddenFields(){
+  document.getElementById('timestamp').value = new Date().toISOString();
+  fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
+    document.getElementById('location').value = `${d.city}, ${d.region}, ${d.country_name}`;
+  }).catch(err=>console.log('Location error:', err));
+}
+setHiddenFields();
+
+// Add new row to table
+function addRowToTable(data) {
+  const tbody = document.querySelector('#submissionsTable tbody');
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>${data.full_name}</td>
+    <td>${data.email}</td>
+    <td>${data.phone}</td>
+    <td>${data.comment || ''}</td>
+    <td>${data.timestamp}</td>
+    <td>${data.location}</td>
+  `;
+  tbody.appendChild(row);
+}
+
+// Form submission
+const form = document.getElementById('bookingForm');
+const successMessage = document.querySelector('.success-message');
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  setHiddenFields();
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  // Immediately add to table on page
+  addRowToTable(data);
+
+  try {
+    const response = await fetch('https://hooks.zapier.com/hooks/catch/23572733/utq04zu/', {
+      method:'POST', mode:'no-cors', // 'no-cors' allows submission even if network blocks Zapier
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    });
+
+    // Show success message and reset form
+    successMessage.style.display='block';
+    form.reset();
+    setHiddenFields();
+  } catch(err){
+    console.error('Error sending data:', err);
+    alert('Error sending data: ' + err.message);
+  }
+});
+</script>
+
+</body>
+</html>
