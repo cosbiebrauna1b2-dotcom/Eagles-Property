@@ -94,25 +94,19 @@
   </table>
 
 <script>
-const form = document.getElementById('bookingForm');
-const successMessage = document.getElementById('successMessage');
-const submissionsTable = document.getElementById('submissionsTable').querySelector('tbody');
-
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const data = {
-    full_name: document.getElementById('fullName').value,
-    email: document.getElementById('email').value,
-    phone: document.getElementById('phone').value,
-    comment: document.getElementById('comment').value
-  };
+  const formData = new FormData();
+  formData.append("full_name", document.getElementById("fullName").value);
+  formData.append("email", document.getElementById("email").value);
+  formData.append("phone", document.getElementById("phone").value);
+  formData.append("comment", document.getElementById("comment").value);
 
   try {
     await fetch("https://hooks.zapier.com/hooks/catch/23572733/utq04zu/", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      body: formData
     });
 
     successMessage.style.display = "block";
@@ -120,7 +114,7 @@ form.addEventListener('submit', async (e) => {
     form.reset();
 
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${data.full_name}</td><td>${data.email}</td><td>${data.phone}</td><td>${data.comment}</td>`;
+    row.innerHTML = `<td>${formData.get("full_name")}</td><td>${formData.get("email")}</td><td>${formData.get("phone")}</td><td>${formData.get("comment")}</td>`;
     submissionsTable.appendChild(row);
 
   } catch (err) {
@@ -129,6 +123,5 @@ form.addEventListener('submit', async (e) => {
   }
 });
 </script>
-
 </body>
 </html>
