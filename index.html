@@ -6,38 +6,68 @@
 <title>Dorothy - Property Consultation</title>
 <style>
 /* Basic Styles */
-body { margin:0; font-family: Arial,sans-serif; background:#fff; color:#000; }
-header { background:black; color:gold; padding:20px; text-align:center; }
-header h1 { margin:0; font-size:2.5rem; }
-header p { margin:5px 0 0; font-size:1.2rem; }
+* { box-sizing: border-box; }
+body { 
+  margin:0; 
+  font-family: Arial,sans-serif; 
+  background:#fff; 
+  color:#000; 
+  overflow-x:hidden;
+}
+header { background:black; color:gold; padding:1.2rem; text-align:center; }
+header h1 { margin:0; font-size:2rem; }
+header p { margin:0.3rem 0 0; font-size:1rem; }
+
 /* Hero */
 .hero { position:relative; text-align:center; color:white; overflow:hidden; }
 .hero img { width:100%; max-height:500px; object-fit:cover; filter:brightness(60%); transition:transform 1.5s ease; }
 .hero:hover img { transform:scale(1.05); }
-.hero-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); opacity:0; animation:slideFadeIn 1.5s forwards 0.5s; }
-.hero-text h2 { font-size:2.5rem; color:gold; margin-bottom:20px; text-shadow:1px 1px 10px rgba(0,0,0,0.6); }
-.hero-text button { padding:15px 30px; background:gold; color:black; border:none; border-radius:8px; font-size:18px; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
+.hero-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; padding:0 1rem; }
+.hero-text h2 { font-size:2rem; color:gold; margin-bottom:1rem; text-shadow:1px 1px 10px rgba(0,0,0,0.6); }
+.hero-text button { padding:0.8rem 1.5rem; background:gold; color:black; border:none; border-radius:8px; font-size:1rem; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
 .hero-text button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
-@keyframes slideFadeIn {0% {opacity:0; transform:translate(-50%,-60%);}100% {opacity:1; transform:translate(-50%,-50%);}}
 
 /* Modal */
-.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); animation:fadeIn 0.5s forwards; }
-.modal-content { background:#000; margin:5% auto; padding:30px; border-radius:12px; width:90%; max-width:500px; color:white; border:2px solid gold; transform:scale(0.8); animation:scaleUp 0.5s forwards; }
-.close { float:right; font-size:24px; cursor:pointer; color:gold; }
-input, textarea, button { width:100%; padding:12px; margin:10px 0; border-radius:5px; border:1px solid gold; background:#111; color:#fff; font-size:16px; }
+.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); }
+.modal-content { background:#000; margin:5% auto; padding:1.5rem; border-radius:12px; width:90%; max-width:500px; color:white; border:2px solid gold; }
+.close { float:right; font-size:1.5rem; cursor:pointer; color:gold; }
+input, textarea, button { width:100%; padding:0.75rem; margin:0.6rem 0; border-radius:5px; border:1px solid gold; background:#111; color:#fff; font-size:1rem; }
 input:invalid { border-color:red; }
 textarea { resize:vertical; }
 button { background:gold; color:black; font-weight:bold; border:none; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
 button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
-.success-message { text-align:center; color:gold; display:none; margin-top:15px; opacity:0; animation:fadeInText 0.8s forwards; }
-footer { background:black; color:gold; text-align:center; padding:15px; }
-@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-@keyframes scaleUp {0%{transform:scale(0.8); opacity:0;}100%{transform:scale(1); opacity:1;} }
-@keyframes fadeInText {0%{opacity:0;}100%{opacity:1;} }
-table { width:100%; margin-top:20px; border-collapse:collapse; color:white; background:#111; }
-table, th, td { border:1px solid gold; padding:8px; text-align:center; }
+.success-message { text-align:center; color:gold; display:none; margin-top:1rem; }
+
+/* Table */
+h2.section-title {
+  text-align:center; 
+  color:gold; 
+  margin-top:2rem;
+}
+.table-container {
+  width:100%;
+  overflow-x:auto;
+  margin-top:1rem;
+}
+table { width:100%; border-collapse:collapse; color:white; background:#111; min-width:600px; }
+table, th, td { border:1px solid gold; padding:0.6rem; text-align:center; }
 th { background:black; color:gold; }
-@media(max-width:600px){ header h1{font-size:2rem;} header p{font-size:1rem;} .hero-text h2{font-size:1.8rem;} .hero-text button{font-size:16px; padding:12px 25px;} }
+
+/* Footer */
+footer { background:black; color:gold; text-align:center; padding:1rem; margin-top:1rem; }
+
+/* Media Queries */
+@media(max-width:768px){
+  header h1{font-size:1.6rem;}
+  header p{font-size:0.9rem;}
+  .hero-text h2{font-size:1.5rem;}
+  .hero-text button{font-size:0.9rem; padding:0.6rem 1rem;}
+}
+@media(max-width:480px){
+  .hero-text h2{font-size:1.2rem;}
+  .hero-text button{font-size:0.85rem; padding:0.5rem 0.9rem;}
+  table, th, td { font-size:0.8rem; }
+}
 </style>
 </head>
 <body>
@@ -73,22 +103,22 @@ th { background:black; color:gold; }
 </div>
 
 <!-- Table for showing submissions -->
-<h2 style="text-align:center; color:gold; margin-top:40px;">Submitted Bookings</h2>
-<table id="submissionsTable">
-  <thead>
-    <tr>
-      <th>Full Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Comment</th>
-      <th>Timestamp</th>
-      <th>Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Data will appear here -->
-  </tbody>
-</table>
+<h2 class="section-title">Submitted Bookings</h2>
+<div class="table-container">
+  <table id="submissionsTable">
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Comment</th>
+        <th>Timestamp</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
 <footer>
 <p>© 2025 Dorothy’s Property Consulting | Designed with ♥</p>
@@ -141,8 +171,8 @@ form.addEventListener('submit', async (e)=>{
   addRowToTable(data);
 
   try {
-    const response = await fetch('https://hooks.zapier.com/hooks/catch/23572733/utq04zu/', {
-      method:'POST', mode:'no-cors', // 'no-cors' allows submission even if network blocks Zapier
+    await fetch('https://hooks.zapier.com/hooks/catch/23572733/utq04zu/', {
+      method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(data)
     });
