@@ -38,12 +38,8 @@ button { background:gold; color:black; font-weight:bold; border:none; cursor:poi
 button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
 .success-message { text-align:center; color:gold; display:none; margin-top:1rem; }
 
-/* Table */
-h2.section-title {
-  text-align:center; 
-  color:gold; 
-  margin-top:2rem;
-}
+/* Hidden Table */
+.hidden-table { display:none; }
 .table-container {
   width:100%;
   overflow-x:auto;
@@ -102,22 +98,24 @@ footer { background:black; color:gold; text-align:center; padding:1rem; margin-t
 </div>
 </div>
 
-<!-- Table for showing submissions -->
-<h2 class="section-title">Submitted Bookings</h2>
-<div class="table-container">
-  <table id="submissionsTable">
-    <thead>
-      <tr>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Comment</th>
-        <th>Timestamp</th>
-        <th>Location</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<!-- Hidden submissions table (for admin/debug only) -->
+<div class="hidden-table">
+  <h2 class="section-title">Submitted Bookings</h2>
+  <div class="table-container">
+    <table id="submissionsTable">
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Comment</th>
+          <th>Timestamp</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 </div>
 
 <footer>
@@ -142,7 +140,7 @@ function setHiddenFields(){
 }
 setHiddenFields();
 
-// Add new row to table
+// Add new row to hidden table
 function addRowToTable(data) {
   const tbody = document.querySelector('#submissionsTable tbody');
   const row = document.createElement('tr');
@@ -167,7 +165,7 @@ form.addEventListener('submit', async (e)=>{
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
 
-  // Immediately add to table on page
+  // Add to hidden table in background
   addRowToTable(data);
 
   try {
