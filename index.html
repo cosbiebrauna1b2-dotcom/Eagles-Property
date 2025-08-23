@@ -145,6 +145,7 @@ function addRowToTable(data) {
 }
 
 function sendWithBeaconOrFallback(data) {
+  // Prefer sendBeacon (no CORS preflight, very reliable for sending)
   try {
     const payload = JSON.stringify(data);
     const blob = new Blob([payload], { type: 'text/plain;charset=UTF-8' });
@@ -153,8 +154,10 @@ function sendWithBeaconOrFallback(data) {
     if (ok) {
       return Promise.resolve({ ok: true, via: 'beacon' });
     }
-  } catch (e) {}
-
+  } catch (e) {
+    // fall through to fetch fallback
+  }
+  // Fallback: no-cors + FormData
   try {
     const fd = new FormData();
     Object.entries(data).forEach(([k,v]) => fd.append(k, v ?? ''));
@@ -182,11 +185,6 @@ form.addEventListener('submit', async (e)=>{
   errorMsg.style.display = 'none';
 
   const data = Object.fromEntries(new FormData(form).entries());
-
-  // ✅ Fix for Google Sheets formula parse error with +country codes
-  if (data.phone && data.phone.startsWith("+")) {
-    data.phone = "'" + data.phone; 
-  }
 
   // Add to hidden admin table
   addRowToTable(data);
