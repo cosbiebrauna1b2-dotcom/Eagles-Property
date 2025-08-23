@@ -1,83 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dorothy - Property Consultation</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; color:#333;
-    }
-    header {
-      background:#0077cc; color:#fff; padding:20px; text-align:center;
-    }
-    h1 { margin:0; font-size:1.8em; }
-    main { padding:20px; display:flex; justify-content:center; }
-    button {
-      background:#0077cc; color:white; border:none; padding:10px 20px; font-size:1em; border-radius:5px; cursor:pointer;
-    }
-    button:hover { background:#005fa3; }
-    .modal {
-      display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto;
-      background-color:rgba(0,0,0,0.5); align-items:center; justify-content:center;
-    }
-    .modal-content {
-      background:#fff; padding:20px; border-radius:8px; max-width:400px; width:90%; position:relative;
-    }
-    .close {
-      position:absolute; right:15px; top:10px; font-size:1.2em; cursor:pointer; color:#666;
-    }
-    .close:hover { color:#000; }
-    form label { display:block; margin-top:10px; font-weight:bold; }
-    form input, form textarea {
-      width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px;
-    }
-    form textarea { resize:vertical; min-height:80px; }
-    .success, .error { margin-top:10px; display:none; padding:10px; border-radius:5px; }
-    .success { background:#d4edda; color:#155724; }
-    .error { background:#f8d7da; color:#721c24; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dorothy - Property Consultation</title>
+<style>
+/* Basic Styles */
+* { box-sizing: border-box; }
+body { 
+  margin:0; 
+  font-family: Arial,sans-serif; 
+  background:#fff; 
+  color:#000; 
+  overflow-x:hidden;
+}
+header { background:black; color:gold; padding:1.2rem; text-align:center; }
+header h1 { margin:0; font-size:2rem; }
+header p { margin:0.3rem 0 0; font-size:1rem; }
 
-    /* Hidden table for admin/debugging */
-    .table-container { display:none; }
-    table { width:100%; border-collapse:collapse; margin-top:20px; }
-    th, td { border:1px solid #ddd; padding:8px; text-align:left; }
-    th { background:#0077cc; color:white; }
-  </style>
+/* Hero */
+.hero { position:relative; text-align:center; color:white; overflow:hidden; }
+.hero img { width:100%; max-height:500px; object-fit:cover; filter:brightness(60%); transition:transform 1.5s ease; }
+.hero:hover img { transform:scale(1.05); }
+.hero-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; padding:0 1rem; }
+.hero-text h2 { font-size:2rem; color:gold; margin-bottom:1rem; text-shadow:1px 1px 10px rgba(0,0,0,0.6); }
+.hero-text button { padding:0.8rem 1.5rem; background:gold; color:black; border:none; border-radius:8px; font-size:1rem; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
+.hero-text button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
+
+/* Modal */
+.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); }
+.modal-content { background:#000; margin:5% auto; padding:1.5rem; border-radius:12px; width:90%; max-width:500px; color:white; border:2px solid gold; }
+.close { float:right; font-size:1.5rem; cursor:pointer; color:gold; }
+input, textarea, button { width:100%; padding:0.75rem; margin:0.6rem 0; border-radius:5px; border:1px solid gold; background:#111; color:#fff; font-size:1rem; }
+input:invalid { border-color:red; }
+textarea { resize:vertical; }
+button { background:gold; color:black; font-weight:bold; border:none; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
+button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
+.success-message { text-align:center; color:gold; display:none; margin-top:1rem; }
+.error-message { text-align:center; color:#ff6b6b; display:none; margin-top:0.5rem; }
+
+/* Hidden Table */
+.hidden-table { display:none; }
+.table-container {
+  width:100%;
+  overflow-x:auto;
+  margin-top:1rem;
+}
+table { width:100%; border-collapse:collapse; color:white; background:#111; min-width:400px; }
+table, th, td { border:1px solid gold; padding:0.6rem; text-align:center; }
+th { background:black; color:gold; }
+
+/* Footer */
+footer { background:black; color:gold; text-align:center; padding:1rem; margin-top:1rem; }
+
+/* Media Queries */
+@media(max-width:768px){
+  header h1{font-size:1.6rem;}
+  header p{font-size:0.9rem;}
+  .hero-text h2{font-size:1.5rem;}
+  .hero-text button{font-size:0.9rem; padding:0.6rem 1rem;}
+}
+@media(max-width:480px){
+  .hero-text h2{font-size:1.2rem;}
+  .hero-text button{font-size:0.85rem; padding:0.5rem 0.9rem;}
+  table, th, td { font-size:0.8rem; }
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Dorothy - Property Consultation</h1>
-  </header>
-  <main>
-    <button id="openModal">Book a Consultation</button>
-  </main>
 
-  <!-- Modal -->
-  <div id="bookingModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Book Your Consultation</h2>
-      <form id="bookingForm">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" required/>
+<header>
+<h1>Dorothy’s Property Consulting</h1>
+<p>Helping you find the best properties in the UK</p>
+</header>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required/>
+<div class="hero">
+<img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="UK property">
+<div class="hero-text">
+<h2>Invest in Your Dream Home Today</h2>
+<button id="openFormBtn">Book a Free Consultation</button>
+</div>
+</div>
 
-        <label for="phone">Phone</label>
-        <input type="tel" id="phone" name="phone" required/>
+<div id="consultModal" class="modal">
+<div class="modal-content">
+<span class="close" id="closeFormBtn">&times;</span>
+<h2 style="color: gold; text-align:center;">Book Your Free Consultation</h2>
+<form id="bookingForm">
+<input type="text" name="full_name" placeholder="Full Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="tel" name="phone" placeholder="Phone Number" required>
+<textarea name="comment" placeholder="Comment (Optional)" rows="4"></textarea>
+<button type="submit">Submit</button>
+</form>
+<p class="success-message" id="successMsg">Thank you! Your booking has been submitted.</p>
+<p class="error-message" id="errorMsg">We couldn’t confirm the submission. We attempted a safe fallback. If you don’t get a confirmation email, please try again.</p>
+</div>
+</div>
 
-        <label for="comment">Comment</label>
-        <textarea id="comment" name="comment" required></textarea>
-
-        <button type="submit">Submit</button>
-      </form>
-      <div class="success" id="successMsg">Your booking has been submitted successfully!</div>
-      <div class="error" id="errorMsg">Something went wrong. Please try again.</div>
-    </div>
-  </div>
-
-  <!-- Hidden admin table -->
+<!-- Hidden submissions table (for admin/debug only) -->
+<div class="hidden-table">
+  <h2 class="section-title">Submitted Bookings</h2>
   <div class="table-container">
     <table id="submissionsTable">
       <thead>
@@ -91,83 +114,111 @@
       <tbody></tbody>
     </table>
   </div>
+</div>
 
-  <script>
-    const modal = document.getElementById("bookingModal");
-    const openModalBtn = document.getElementById("openModal");
-    const closeModalBtn = document.querySelector(".close");
-    const form = document.getElementById("bookingForm");
-    const successMsg = document.getElementById("successMsg");
-    const errorMsg = document.getElementById("errorMsg");
+<footer>
+<p>© 2025 Dorothy’s Property Consulting | Designed with ♥</p>
+</footer>
 
-    openModalBtn.onclick = ()=>{ modal.style.display="flex"; };
-    closeModalBtn.onclick = ()=>{ modal.style.display="none"; };
-    window.onclick = (e)=>{ if(e.target == modal){ modal.style.display="none"; } };
+<script>
+const ZAPIER_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23572733/utq04zu/';
 
-    function addRowToTable(data){
-      const table = document.getElementById("submissionsTable").getElementsByTagName('tbody')[0];
-      const row = table.insertRow();
-      row.insertCell(0).innerText = data.name;
-      row.insertCell(1).innerText = data.email;
-      row.insertCell(2).innerText = data.phone;
-      row.insertCell(3).innerText = data.comment;
+// Modal logic
+const modal = document.getElementById("consultModal");
+const openBtn = document.getElementById("openFormBtn");
+const closeBtn = document.getElementById("closeFormBtn");
+openBtn.onclick = () => modal.style.display="block";
+closeBtn.onclick = () => modal.style.display="none";
+window.onclick = (e) => { if(e.target==modal) modal.style.display="none"; }
+
+// Helpers
+function addRowToTable(data) {
+  const tbody = document.querySelector('#submissionsTable tbody');
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>${data.full_name}</td>
+    <td>${data.email}</td>
+    <td>${data.phone}</td>
+    <td>${data.comment || ''}</td>
+  `;
+  tbody.appendChild(row);
+}
+
+function sendWithBeaconOrFallback(data) {
+  try {
+    const payload = JSON.stringify(data);
+    const blob = new Blob([payload], { type: 'text/plain;charset=UTF-8' });
+    const ok = navigator.sendBeacon && navigator.sendBeacon(ZAPIER_WEBHOOK, blob);
+
+    if (ok) {
+      return Promise.resolve({ ok: true, via: 'beacon' });
     }
+  } catch (e) {}
 
-    async function sendWithBeaconOrFallback(data){
-      const url = "https://hooks.zapier.com/hooks/catch/23572733/utq04zu/"; // replace with your Zapier webhook
+  try {
+    const fd = new FormData();
+    Object.entries(data).forEach(([k,v]) => fd.append(k, v ?? ''));
+    return fetch(ZAPIER_WEBHOOK, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: fd,
+      credentials: 'omit',
+      keepalive: true
+    }).then(() => ({ ok: true, via: 'fallback' }))
+      .catch(() => ({ ok: false }));
+  } catch (e2) {
+    return Promise.resolve({ ok: false });
+  }
+}
 
-      try {
-        const blob = new Blob([JSON.stringify(data)], {type : 'application/json'});
-        if (navigator.sendBeacon) {
-          const queued = navigator.sendBeacon(url, blob);
-          if (queued) return {ok:true, via:"beacon"};
-        }
-        const res = await fetch(url, {
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body: JSON.stringify(data)
-        });
-        return {ok:res.ok, via:"fetch"};
-      } catch(err){
-        console.error(err);
-        return {ok:false};
-      }
+// Form submission
+const form = document.getElementById('bookingForm');
+const successMsg = document.getElementById('successMsg');
+const errorMsg = document.getElementById('errorMsg');
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  successMsg.style.display = 'none';
+  errorMsg.style.display = 'none';
+
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  // ✅ Fix for Google Sheets formula parse error with +country codes
+  if (data.phone && data.phone.startsWith("+")) {
+    data.phone = "'" + data.phone; 
+  }
+
+  // Add to hidden admin table
+  addRowToTable(data);
+
+  const btn = form.querySelector('button[type="submit"]');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Submitting...';
+
+  const result = await sendWithBeaconOrFallback(data);
+
+  btn.disabled = false; btn.textContent = orig;
+
+  if (result.ok) {
+    successMsg.style.display = 'block';
+    if (result.via === 'fallback') {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = 'Submitted via a safe fallback. If you don’t see it in Zapier, please test your webhook trigger.';
     }
+    form.reset();
+  } else {
+    errorMsg.style.display = 'block';
+  }
+});
 
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      successMsg.style.display = 'none';
-      errorMsg.style.display = 'none';
+// Optional: admin toggle (Ctrl+Alt+D) to show the hidden table
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'd') {
+    const wrap = document.querySelector('.hidden-table');
+    wrap.style.display = (wrap.style.display === 'none' || !wrap.style.display) ? 'block' : 'none';
+  }
+});
+</script>
 
-      let data = Object.fromEntries(new FormData(form).entries());
-
-      // ✅ Fix for Google Sheets parse error with +233 numbers
-      if (data.phone && data.phone.startsWith("+")) {
-        data.phone = "'" + data.phone; 
-      }
-
-      // Add to hidden admin table
-      addRowToTable(data);
-
-      const btn = form.querySelector('button[type="submit"]');
-      const orig = btn.textContent;
-      btn.disabled = true; btn.textContent = 'Submitting...';
-
-      const result = await sendWithBeaconOrFallback(data);
-
-      btn.disabled = false; btn.textContent = orig;
-
-      if (result.ok) {
-        successMsg.style.display = 'block';
-        if (result.via === 'fallback') {
-          errorMsg.style.display = 'block';
-          errorMsg.textContent = 'Submitted via fallback. If you don’t see it in Zapier, check your webhook setup.';
-        }
-        form.reset();
-      } else {
-        errorMsg.style.display = 'block';
-      }
-    });
-  </script>
 </body>
 </html>
