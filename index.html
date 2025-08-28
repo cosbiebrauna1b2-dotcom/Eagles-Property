@@ -1,222 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dorothy - Property Consultation</title>
-<style>
-/* Basic Styles */
-* { box-sizing: border-box; }
-body { 
-  margin:0; 
-  font-family: Arial,sans-serif; 
-  background:#fff; 
-  color:#000; 
-  overflow-x:hidden;
-}
-header { background:black; color:gold; padding:1.2rem; text-align:center; }
-header h1 { margin:0; font-size:2rem; }
-header p { margin:0.3rem 0 0; font-size:1rem; }
-
-/* Hero */
-.hero { position:relative; text-align:center; color:white; overflow:hidden; }
-.hero img { width:100%; max-height:500px; object-fit:cover; filter:brightness(60%); transition:transform 1.5s ease; }
-.hero:hover img { transform:scale(1.05); }
-.hero-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; padding:0 1rem; }
-.hero-text h2 { font-size:2rem; color:gold; margin-bottom:1rem; text-shadow:1px 1px 10px rgba(0,0,0,0.6); }
-.hero-text button { padding:0.8rem 1.5rem; background:gold; color:black; border:none; border-radius:8px; font-size:1rem; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
-.hero-text button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
-
-/* Modal */
-.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); }
-.modal-content { background:#000; margin:5% auto; padding:1.5rem; border-radius:12px; width:90%; max-width:500px; color:white; border:2px solid gold; }
-.close { float:right; font-size:1.5rem; cursor:pointer; color:gold; }
-input, textarea, button { width:100%; padding:0.75rem; margin:0.6rem 0; border-radius:5px; border:1px solid gold; background:#111; color:#fff; font-size:1rem; }
-input:invalid { border-color:red; }
-textarea { resize:vertical; }
-button { background:gold; color:black; font-weight:bold; border:none; cursor:pointer; transition:0.3s, box-shadow 0.6s; }
-button:hover { background:#d4af37; box-shadow:0 0 20px #d4af37; }
-.success-message { text-align:center; color:gold; display:none; margin-top:1rem; }
-.error-message { text-align:center; color:#ff6b6b; display:none; margin-top:0.5rem; }
-
-/* Hidden Table */
-.hidden-table { display:none; }
-.table-container {
-  width:100%;
-  overflow-x:auto;
-  margin-top:1rem;
-}
-table { width:100%; border-collapse:collapse; color:white; background:#111; min-width:400px; }
-table, th, td { border:1px solid gold; padding:0.6rem; text-align:center; }
-th { background:black; color:gold; }
-
-/* Footer */
-footer { background:black; color:gold; text-align:center; padding:1rem; margin-top:1rem; }
-
-/* Media Queries */
-@media(max-width:768px){
-  header h1{font-size:1.6rem;}
-  header p{font-size:0.9rem;}
-  .hero-text h2{font-size:1.5rem;}
-  .hero-text button{font-size:0.9rem; padding:0.6rem 1rem;}
-}
-@media(max-width:480px){
-  .hero-text h2{font-size:1.2rem;}
-  .hero-text button{font-size:0.85rem; padding:0.5rem 0.9rem;}
-  table, th, td { font-size:0.8rem; }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eagles Findings Limited</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Header -->
+  <header class="bg-black text-gold p-4 flex items-center">
+    <img src="your-logo.png" alt="Eagles Findings Logo" class="h-12 w-auto mr-3">
+    <div class="flex flex-col">
+      <span class="text-lg font-bold">Eagles Findings Limited</span>
+    </div>
+  </header>
 
-<header>
-<h1>Dorothy’s Property Consulting</h1>
-<p>Helping you find the best properties in the UK</p>
-</header>
+  <!-- Hero Section -->
+  <section class="text-center py-16 bg-gradient-to-r from-black via-gray-800 to-black text-gold">
+    <h1 class="text-4xl font-bold mb-4">Welcome to Eagles Findings Limited</h1>
+    <p class="mb-6">Your trusted partner in property and business consulting</p>
+    <button onclick="openModal('consultationModal')" class="bg-gold text-black px-6 py-3 rounded-lg font-semibold shadow-md">Book a Consultation</button>
+    <button onclick="openModal('consultationModal')" class="ml-4 bg-gold text-black px-6 py-3 rounded-lg font-semibold shadow-md">Download PDF</button>
+  </section>
 
-<div class="hero">
-<img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="UK property">
-<div class="hero-text">
-<h2>Invest in Your Dream Home Today</h2>
-<button id="openFormBtn">Book a Free Consultation</button>
-</div>
-</div>
+  <!-- Why Choose Us -->
+  <section class="py-12 px-6">
+    <h2 class="text-2xl font-bold text-center mb-8">Why Choose Eagles Findings?</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 shadow-lg rounded-2xl">Expertise in property research</div>
+      <div class="bg-white p-6 shadow-lg rounded-2xl">Tailored solutions for clients</div>
+      <div class="bg-white p-6 shadow-lg rounded-2xl">Trusted by individuals & businesses</div>
+    </div>
+  </section>
 
-<div id="consultModal" class="modal">
-<div class="modal-content">
-<span class="close" id="closeFormBtn">&times;</span>
-<h2 style="color: gold; text-align:center;">Book Your Free Consultation</h2>
-<form id="bookingForm">
-<input type="text" name="full_name" placeholder="Full Name" required>
-<input type="email" name="email" placeholder="Email" required>
-<input type="tel" name="phone" placeholder="Phone Number" required>
-<textarea name="comment" placeholder="Comment (Optional)" rows="4"></textarea>
-<button type="submit">Submit</button>
-</form>
-<p class="success-message" id="successMsg">Thank you! Your booking has been submitted.</p>
-<p class="error-message" id="errorMsg">We couldn’t confirm the submission. We attempted a safe fallback. If you don’t get a confirmation email, please try again.</p>
-</div>
-</div>
+  <!-- Our Services -->
+  <section class="py-12 px-6 bg-gray-100">
+    <h2 class="text-2xl font-bold text-center mb-8">Our Services</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 shadow rounded-2xl">Property Verification</div>
+      <div class="bg-white p-6 shadow rounded-2xl">Business Consulting</div>
+      <div class="bg-white p-6 shadow rounded-2xl">Records Management</div>
+      <div class="bg-white p-6 shadow rounded-2xl">Advisory Services</div>
+    </div>
+  </section>
 
-<!-- Hidden submissions table (for admin/debug only) -->
-<div class="hidden-table">
-  <h2 class="section-title">Submitted Bookings</h2>
-  <div class="table-container">
-    <table id="submissionsTable">
-      <thead>
+  <!-- Who We Serve -->
+  <section class="py-12 px-6">
+    <h2 class="text-2xl font-bold text-center mb-8">Who We Serve</h2>
+    <p class="text-center max-w-2xl mx-auto">We serve individuals, investors, real estate firms, financial institutions, and organizations needing verified, reliable property and business information.</p>
+  </section>
+
+  <!-- Competitive Advantages -->
+  <section class="py-12 px-6 bg-gray-100">
+    <h2 class="text-2xl font-bold text-center mb-8">Our Competitive Advantages</h2>
+    <ul class="list-disc max-w-xl mx-auto pl-5 space-y-2">
+      <li>In-depth research and data accuracy</li>
+      <li>Dedicated expert team</li>
+      <li>Client-centered approach</li>
+    </ul>
+  </section>
+
+  <!-- Contact -->
+  <section class="py-12 px-6 text-center">
+    <h2 class="text-2xl font-bold mb-4">Contact Us</h2>
+    <p>Email: info@eaglesfindings.com | Phone: +233 55 130 4277</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black text-gold text-center py-6">
+    <div class="flex flex-col items-center">
+      <img src="your-logo.png" alt="Eagles Findings Logo" class="h-10 w-auto mb-2">
+      <span class="font-semibold">Eagles Findings Limited</span>
+      <p class="text-sm">&copy; 2025 Eagles Findings Limited. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div id="consultationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+      <button onclick="closeModal('consultationModal')" class="absolute top-2 right-2 text-gray-500">&times;</button>
+      <h3 class="text-xl font-bold mb-4">Get Started</h3>
+      <form id="consultationForm" class="space-y-4">
+        <input type="text" name="name" placeholder="Full Name" class="w-full border px-3 py-2 rounded" required>
+        <input type="email" name="email" placeholder="Email Address" class="w-full border px-3 py-2 rounded" required>
+        <input type="tel" name="phone" placeholder="Phone Number (with country code)" class="w-full border px-3 py-2 rounded" required>
+        <button type="submit" class="w-full bg-gold text-black py-2 rounded font-semibold">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Leads Table -->
+  <section class="p-6">
+    <h2 class="text-xl font-bold mb-4">Leads</h2>
+    <table class="w-full border-collapse border border-gray-300">
+      <thead class="bg-gray-200">
         <tr>
-          <th>Full Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Comment</th>
+          <th class="border px-4 py-2">Name</th>
+          <th class="border px-4 py-2">Email</th>
+          <th class="border px-4 py-2">Phone</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="leadsTable"></tbody>
     </table>
-  </div>
-</div>
+  </section>
 
-<footer>
-<p>© 2025 Dorothy’s Property Consulting | Designed with ♥</p>
-</footer>
-
-<script>
-const ZAPIER_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23572733/utq04zu/';
-
-// Modal logic
-const modal = document.getElementById("consultModal");
-const openBtn = document.getElementById("openFormBtn");
-const closeBtn = document.getElementById("closeFormBtn");
-openBtn.onclick = () => modal.style.display="block";
-closeBtn.onclick = () => modal.style.display="none";
-window.onclick = (e) => { if(e.target==modal) modal.style.display="none"; }
-
-// Helpers
-function addRowToTable(data) {
-  const tbody = document.querySelector('#submissionsTable tbody');
-  const row = document.createElement('tr');
-  row.innerHTML = `
-    <td>${data.full_name}</td>
-    <td>${data.email}</td>
-    <td>${data.phone}</td>
-    <td>${data.comment || ''}</td>
-  `;
-  tbody.appendChild(row);
-}
-
-function sendWithBeaconOrFallback(data) {
-  // Prefer sendBeacon (no CORS preflight, very reliable for sending)
-  try {
-    const payload = JSON.stringify(data);
-    const blob = new Blob([payload], { type: 'text/plain;charset=UTF-8' });
-    const ok = navigator.sendBeacon && navigator.sendBeacon(ZAPIER_WEBHOOK, blob);
-
-    if (ok) {
-      return Promise.resolve({ ok: true, via: 'beacon' });
+  <script>
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
     }
-  } catch (e) {
-    // fall through to fetch fallback
-  }
-  // Fallback: no-cors + FormData
-  try {
-    const fd = new FormData();
-    Object.entries(data).forEach(([k,v]) => fd.append(k, v ?? ''));
-    return fetch(ZAPIER_WEBHOOK, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: fd,
-      credentials: 'omit',
-      keepalive: true
-    }).then(() => ({ ok: true, via: 'fallback' }))
-      .catch(() => ({ ok: false }));
-  } catch (e2) {
-    return Promise.resolve({ ok: false });
-  }
-}
-
-// Form submission
-const form = document.getElementById('bookingForm');
-const successMsg = document.getElementById('successMsg');
-const errorMsg = document.getElementById('errorMsg');
-
-form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  successMsg.style.display = 'none';
-  errorMsg.style.display = 'none';
-
-  const data = Object.fromEntries(new FormData(form).entries());
-
-  // Add to hidden admin table
-  addRowToTable(data);
-
-  const btn = form.querySelector('button[type="submit"]');
-  const orig = btn.textContent;
-  btn.disabled = true; btn.textContent = 'Submitting...';
-
-  const result = await sendWithBeaconOrFallback(data);
-
-  btn.disabled = false; btn.textContent = orig;
-
-  if (result.ok) {
-    successMsg.style.display = 'block';
-    if (result.via === 'fallback') {
-      errorMsg.style.display = 'block';
-      errorMsg.textContent = 'Submitted via a safe fallback. If you don’t see it in Zapier, please test your webhook trigger.';
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
     }
-    form.reset();
-  } else {
-    errorMsg.style.display = 'block';
-  }
-});
 
-// Optional: admin toggle (Ctrl+Alt+D) to show the hidden table
-document.addEventListener('keydown', (e) => {
-  if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'd') {
-    const wrap = document.querySelector('.hidden-table');
-    wrap.style.display = (wrap.style.display === 'none' || !wrap.style.display) ? 'block' : 'none';
-  }
-});
-</script>
-
+    const form = document.getElementById('consultationForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(form));
+      // Save lead to table
+      const row = `<tr><td class='border px-4 py-2'>${formData.name}</td><td class='border px-4 py-2'>${formData.email}</td><td class='border px-4 py-2'>${formData.phone}</td></tr>`;
+      document.getElementById('leadsTable').insertAdjacentHTML('beforeend', row);
+      // Send to Zapier
+      await fetch('https://hooks.zapier.com/hooks/catch/123456/abcde', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      form.reset();
+      closeModal('consultationModal');
+    });
+  </script>
 </body>
 </html>
